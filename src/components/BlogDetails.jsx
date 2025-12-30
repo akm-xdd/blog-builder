@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { X, Image as ImageIcon } from 'lucide-react'
+import { X, Image as ImageIcon, Check } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
 import { Badge } from './ui/badge'
 import { Button } from './ui/button'
@@ -24,6 +24,10 @@ export default function BlogDetails({
   mode
 }) {
   const [coverModal, setCoverModal] = useState(false)
+
+  const isIndustrySelected = (industryId) => {
+    return selectedSecondary.some(tag => tag.id === industryId)
+  }
 
   return (
     <div className="space-y-6 mt-8 px-6">
@@ -130,11 +134,21 @@ export default function BlogDetails({
             <SelectValue placeholder="Select industries" />
           </SelectTrigger>
           <SelectContent>
-            {industries.map((tag) => (
-              <SelectItem key={tag.id} value={tag}>
-                {tag.name}
-              </SelectItem>
-            ))}
+            {industries.map((tag) => {
+              const selected = isIndustrySelected(tag.id)
+              return (
+                <SelectItem 
+                  key={tag.id} 
+                  value={tag}
+                  className={selected ? "bg-gray-100" : ""}
+                >
+                  <div className="flex items-center justify-between w-full">
+                    <span>{tag.name}</span>
+                    {selected && <Check className="w-4 h-4 ml-2 text-gray-900" />}
+                  </div>
+                </SelectItem>
+              )
+            })}
           </SelectContent>
         </Select>
         
